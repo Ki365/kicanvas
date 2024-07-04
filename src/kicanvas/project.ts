@@ -33,7 +33,7 @@ export class Project extends EventTarget implements IDisposable {
         this.#pages_by_path.clear();
     }
 
-    public async load(fs: VirtualFileSystem) {
+    public async load(fs: VirtualFileSystem, fileType: string) {
         log.info(`Loading project from ${fs.constructor.name}`);
 
         this.settings = new ProjectSettings();
@@ -45,7 +45,7 @@ export class Project extends EventTarget implements IDisposable {
         const promises = [];
 
         for (const filename of this.#fs.list()) {
-            promises.push(this.#load_file(filename));
+            promises.push(this.#load_file(filename, fileType));
         }
 
         await Promise.all(promises);
@@ -61,16 +61,16 @@ export class Project extends EventTarget implements IDisposable {
         );
     }
 
-    async #load_file(filename: string) {
+    async #load_file(filename: string, fileType: string) {
         log.info(`Loading file ${filename}`);
 
-        if (filename.endsWith(".kicad_sch")) {
+        if (fileType == "sch" || filename.endsWith(".kicad_sch")) {
             return await this.#load_doc(KicadSch, filename);
         }
-        if (filename.endsWith(".kicad_pcb")) {
+        if (fileType == "pcb" || filename.endsWith(".kicad_pcb")) {
             return await this.#load_doc(KicadPCB, filename);
         }
-        if (filename.endsWith(".kicad_pro")) {
+        if (fileType == "pro" || filename.endsWith(".kicad_pro")) {
             return this.#load_meta(filename);
         }
 

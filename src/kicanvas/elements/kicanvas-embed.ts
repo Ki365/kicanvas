@@ -63,6 +63,9 @@ class KiCanvasEmbedElement extends KCUIElement {
     #project: Project = new Project();
 
     @attribute({ type: String })
+    fileType: "sch" | "pcb" | "pro";
+
+    @attribute({ type: String })
     src: string | null;
 
     @attribute({ type: Boolean })
@@ -124,7 +127,7 @@ class KiCanvasEmbedElement extends KCUIElement {
         this.loading = true;
 
         try {
-            await this.#project.load(vfs);
+            await this.#project.load(vfs, this.fileType);
 
             this.loaded = true;
             await this.update();

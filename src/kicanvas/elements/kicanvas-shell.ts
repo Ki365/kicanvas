@@ -64,6 +64,9 @@ class KiCanvasShellElement extends KCUIElement {
         this.provideContext("project", this.project);
     }
 
+    @attribute({ type: String })
+    fileType: "sch" | "pcb" | "pro";
+
     @attribute({ type: Boolean })
     public loading: boolean;
 
@@ -118,7 +121,7 @@ class KiCanvasShellElement extends KCUIElement {
         this.loading = true;
 
         try {
-            await this.project.load(vfs);
+            await this.project.load(vfs, this.fileType);
             this.project.set_active_page(this.project.first_page);
             this.loaded = true;
         } catch (e) {
