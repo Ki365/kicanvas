@@ -374,9 +374,10 @@ export function parse_expr(expr: string | List, ...defs: PropertyDefinition[]) {
         }
 
         if (!def) {
-            log.warn(
-                `No def found for element ${element} in expression ${expr}`,
-            );
+            // TODO: find cause of mass warnings and remove this comment:
+            // log.warn(
+            //     `No def found for element ${element} in expression ${expr}`,
+            // );
             continue;
         }
 
